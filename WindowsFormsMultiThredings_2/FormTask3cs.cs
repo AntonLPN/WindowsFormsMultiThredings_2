@@ -9,54 +9,83 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+//Задание №3
+//Переведите четвертое задание Лабораторной работы №3 со всеми
+//изменениями в оконный интерфейс.
 namespace WindowsFormsMultiThredings_2
 {
     public partial class FormTask3cs : Form
     {
+        int[] arr;
         public FormTask3cs()
         {
             InitializeComponent();
+            arr = new int[10];
         }
 
-       async private void button1_Click(object sender, EventArgs e)
+        async private void button1_Click(object sender, EventArgs e)
         {
-            //Создание объекта для генерации чисел
-            Random rnd = new Random();
+            //-----------------------------------------------------
+            //                        Задание №4
+            //Консольное приложение генерирует набор чисел, состоящий из 10000
+            //элементов.С помощью механизма потоков нужно найти максимум, минимум,
+            //среднее в этом наборе.
+            //Для каждой из задач выделите поток.
 
-            int[] arr = new int[20];
+            //не разобрался с invoke поэтому сделал тасками
 
-            for (int i = 0; i < arr.Length; i++)
-            {
-                arr[i] = rnd.Next(0, 10);   //Получить случайное число (в диапазоне от 0 до 10)
-            }
-            var res = await Task.Run(()=> MethodTask3());
+            var min =await Task.Run(() =>MinArr().ToString());
+            var max = await Task.Run(() => MaxArr().ToString()) ;
+            var avr = await Task.Run(() => AverageArr().ToString());
             Task.WaitAll();
-            foreach (var item in res)
-            {
-                textBox1.Text += item.ToString() + "|";
-            }
+
+            textBoxMin.Text = min;
+            textBoxMax.Text = max;
+            textBoxAverage.Text = avr;
+
+
+
+
+
         }
 
-        /// <summary>
-        /// метод выводит значения массива
-        /// </summary>
-        /// <param name="obj"></param>
-        private int[] MethodTask3()
-        {
-            //Создание объекта для генерации чисел
-            Random rnd = new Random();
 
-            int[] arr = new int[20];
+
+
+
+        private int  MinArr()
+        {
+
+           var res = arr.Min();
+            return res;
+        }
+        private int MaxArr()
+        {
+            var res = arr.Max();
+            return res;
+        }
+
+        private double AverageArr()
+        {
+            var res = arr.Average();
+            return res;
+        }
+
+        private void FormTask3cs_Load(object sender, EventArgs e)
+        {
+            Random rnd = new Random();
 
             for (int i = 0; i < arr.Length; i++)
             {
-                arr[i] = rnd.Next(0, 10);   //Получить случайное число (в диапазоне от 0 до 10)
+                arr[i] = rnd.Next(0, 10000);   //Получить случайное число (в диапазоне от 0 до 10000)
             }
+           
 
-
-            return arr;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                this.textBoxArrValue.Text += arr[i].ToString() + "|";
+            }
         }
-
     }
     }
 
